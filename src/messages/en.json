@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Home",
+    "pants": "Pants",
+    "tshirts": "T-Shirts",
+    "shoes": "Shoes",
+    "cart": "Cart",
+    "search": "Search",
+    "searchPlaceholder": "Search products"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search products by name",
+    "button": "Search",
+    "start": "Type a product name to start searching.",
+    "empty": "No products found for \"{query}\"."
+  },
+  "home": {
+    "heroTitle": "Keep it simple, keep it Noiré.",
+    "heroSubtitle": "Premium pieces with clean silhouettes, built for daily movement and bold minimal style.",
+    "shopNow": "Shop New Drop",
+    "newDropSubtitle": "Latest arrivals",
+    "explore": "Explore Shoes",
+    "pants": "Pants",
+    "tshirts": "T-Shirts",
+    "shoes": "Shoes",
+    "featured": "Featured Products",
+    "bestSales": "Best sales",
+    "bestSalesSubtitle": "Noire Hot Picks",
+    "badge1": "Cash on Delivery in Algeria",
+    "badge2": "Fast dispatch in 24-48h",
+    "badge3": "Secure quality checked products"
+  },
+  "category": {
+    "pants": "Pants",
+    "tshirts": "T-Shirts",
+    "shoes": "Shoes"
+  },
+  "product": {
+    "size": "Size",
+    "quantity": "Quantity",
+    "inStock": "In stock",
+    "color": "Color",
+    "addToCart": "Add to cart",
+    "stockForVariant": "{count} left for selected size/color",
+    "addedTitle": "Added to your bag",
+    "goToCart": "Go to Cart",
+    "continueShopping": "Continue shopping"
+  },
+  "cart": {
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue shopping",
+    "size": "Size",
+    "color": "Color",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "shippingNote": "Shipping is calculated by wilaya at checkout.",
+    "checkout": "Proceed to checkout",
+    "title": "Your Bag"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "fullName": "Full name",
+    "phone": "Phone number",
+    "email": "Email (optional)",
+    "next": "Continue",
+    "commune": "Commune",
+    "address": "Address",
+    "notes": "Notes",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "placing": "Placing order...",
+    "placeOrder": "Place Order",
+    "deliveryMethod": "Delivery option",
+    "deliveryHome": "A domicile",
+    "deliveryStopdesk": "Stop desk",
+    "deliveryFee": "Delivery option fee",
+    "missingFields": "Please fill all required fields.",
+    "failed": "Checkout failed. Please try again."
+  },
+  "footer": {
+    "about": "About",
+    "shippingReturns": "Shipping & Returns",
+    "contact": "Contact",
+    "copyright": "Noire Store. All rights reserved."
+  },
+  "static": {
+    "about": {
+      "title": "About Noire",
+      "p1": "Noire is a premium Algerian fashion label focused on clean silhouettes, high-quality fabrics, and modern minimal design.",
+      "p2": "Our collections are built for daily movement and long-term wear, with careful finishing on every piece."
+    },
+    "shipping": {
+      "title": "Shipping & Returns",
+      "p1": "We deliver across all Algerian wilayas with Cash on Delivery only.",
+      "p2": "Shipping fees depend on wilaya and are shown during checkout before confirming your order.",
+      "p3": "If an item arrives damaged or incorrect, contact us within 48 hours to process an exchange."
+    },
+    "contact": {
+      "title": "Contact",
+      "p1": "For order support, contact us by phone or WhatsApp from the checkout confirmation page.",
+      "p2": "Business hours: Saturday to Thursday, 9:00 to 18:00.",
+      "p3": "We usually respond within the same day."
+    }
+  }
+}

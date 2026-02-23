@@ -1,0 +1,147 @@
+
+--- PAGE 1 ---
+
+CAHIER DES CHARGES
+Premium Fashion E-Commerce Website (COD - Algeria - Mobile First)
+1. Project Overview
+Objective: Develop a premium mobile-first e-commerce website for a clothing brand selling Pants,
+T-Shirts, and Shoes.
+
+Modern and premium brand identity (black & white design)
+
+Optimized for smartphones (primary usage via Instagram traffic)
+
+Cash on Delivery payment method
+
+Shipping prices based on Algerian wilayas
+
+Available in Arabic (RTL), French, and English
+
+Integrated with Meta Pixel and Conversions API
+2. Technical Stack
+
+Next.js 14+ (App Router) with TypeScript
+
+TailwindCSS (mobile-first styling)
+
+PostgreSQL database with Prisma ORM
+
+Zod validation
+
+next-intl for multilingual support
+
+Vercel-ready deployment
+
+Meta Pixel + Conversions API integration
+3. Design & UX Requirements
+
+
+
+--- PAGE 2 ---
+
+
+Main colors: White & Black
+
+Premium, minimal, modern, and unusual aesthetic
+
+Large readable typography (elderly-friendly)
+
+No horizontal scroll on any device
+
+Responsive from 320px to large screens
+
+Fast loading and optimized images
+4. Client Website Pages
+
+Home Page: Hero, categories, featured products, trust badges
+
+Category Pages: Pants, T-Shirts, Shoes
+
+Product Page: Gallery, price (DZD), variants, stock, Add to Cart
+
+Cart Page: Items, quantity update, subtotal, shipping estimate
+
+Checkout (COD): Customer info + Shipping address + Wilaya selection
+
+Order Confirmation Page with order number
+
+Static Pages: About, Shipping & Returns, Contact
+5. Admin Dashboard
+
+Secure admin authentication
+
+Product management (CRUD with multilingual fields)
+
+Order management (status updates: new, confirmed, shipped, delivered, cancelled, returned)
+
+Shipping price management per wilaya
+
+Site settings management (store info, Meta Pixel ID, tracking toggle)
+6. Database Structure
+
+User (admin)
+
+Product
+
+ProductImage
+
+
+
+--- PAGE 3 ---
+
+
+Variant (optional)
+
+ShippingWilaya
+
+Order
+
+OrderItem
+
+SiteSettings
+7. Meta Ads Optimization
+
+Track PageView, ViewContent, AddToCart, InitiateCheckout, Purchase
+
+Purchase event triggered on COD order submission
+
+Server-side Conversions API with SHA-256 hashing
+
+Event deduplication using event_id
+8. Internationalization
+
+Locale routing: /en /fr /ar
+
+RTL layout for Arabic
+
+Translated UI and product fields
+
+Currency formatted in DZD
+9. Performance & Security
+
+Mobile-first performance optimization
+
+Lazy loading images
+
+SEO optimization with OpenGraph tags
+
+Secure admin routes
+
+Input validation and rate limiting
+
+
+
+--- PAGE 4 ---
+
+10. Deliverables
+
+Full source code
+
+Database schema & migrations
+
+Seed file including 58 Algerian wilayas
+
+README with setup & deployment instructions
+
+Meta Pixel and CAPI configuration guide
+

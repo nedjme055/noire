@@ -1,0 +1,109 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "pants": "Pantalons",
+    "tshirts": "T-shirts",
+    "shoes": "Chaussures",
+    "cart": "Panier",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher des produits"
+  },
+  "search": {
+    "title": "Recherche",
+    "placeholder": "Rechercher un produit",
+    "button": "Rechercher",
+    "start": "Saisissez un nom de produit pour commencer.",
+    "empty": "Aucun produit trouve pour \"{query}\"."
+  },
+  "home": {
+    "heroTitle": "Keep it simple, keep it Noiré.",
+    "heroSubtitle": "Des pieces premium aux lignes nettes, pensees pour le quotidien et un style minimaliste fort.",
+    "shopNow": "Voir la collection",
+    "newDropSubtitle": "Nouvelles arrivages",
+    "explore": "Explorer les chaussures",
+    "pants": "Pantalons",
+    "tshirts": "T-shirts",
+    "shoes": "Chaussures",
+    "featured": "Produits en vedette",
+    "bestSales": "Meilleures ventes",
+    "bestSalesSubtitle": "Selection Noire",
+    "badge1": "Paiement a la livraison en Algerie",
+    "badge2": "Expedition rapide 24-48h",
+    "badge3": "Produits verifies qualite"
+  },
+  "category": {
+    "pants": "Pantalons",
+    "tshirts": "T-shirts",
+    "shoes": "Chaussures"
+  },
+  "product": {
+    "size": "Taille",
+    "quantity": "Quantite",
+    "inStock": "En stock",
+    "color": "Couleur",
+    "addToCart": "Ajouter au panier",
+    "stockForVariant": "{count} restant pour la taille/couleur choisie",
+    "addedTitle": "Ajouté à votre panier",
+    "goToCart": "Voir le panier",
+    "continueShopping": "Continuer vos achats"
+  },
+  "cart": {
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer vos achats",
+    "size": "Taille",
+    "color": "Couleur",
+    "remove": "Supprimer",
+    "subtotal": "Sous-total",
+    "shippingNote": "La livraison est calculee par wilaya lors du paiement.",
+    "checkout": "Passer au paiement",
+    "title": "Votre panier"
+  },
+  "checkout": {
+    "title": "Commande",
+    "fullName": "Nom complet",
+    "phone": "Numero de telephone",
+    "email": "Email (optionnel)",
+    "next": "Continuer",
+    "commune": "Commune",
+    "address": "Adresse",
+    "notes": "Notes",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "total": "Total",
+    "placing": "Validation...",
+    "placeOrder": "Confirmer la commande",
+    "deliveryMethod": "Option de livraison",
+    "deliveryHome": "A domicile",
+    "deliveryStopdesk": "Stop desk",
+    "deliveryFee": "Frais d'option de livraison",
+    "missingFields": "Veuillez remplir tous les champs obligatoires.",
+    "failed": "Echec de commande. Veuillez reessayer."
+  },
+  "footer": {
+    "about": "A propos",
+    "shippingReturns": "Livraison & retours",
+    "contact": "Contact",
+    "copyright": "Noire Store. Tous droits reserves."
+  },
+  "static": {
+    "about": {
+      "title": "A propos de Noire",
+      "p1": "Noire est une marque algerienne premium axee sur des coupes propres, des tissus de qualite et un design minimal moderne.",
+      "p2": "Nos collections sont concues pour un usage quotidien avec des finitions soignees sur chaque piece."
+    },
+    "shipping": {
+      "title": "Livraison & retours",
+      "p1": "Nous livrons dans toutes les wilayas d'Algerie avec paiement a la livraison uniquement.",
+      "p2": "Les frais de livraison dependent de la wilaya et sont affiches avant la confirmation.",
+      "p3": "En cas d'article endommage ou incorrect, contactez-nous sous 48h pour un echange."
+    },
+    "contact": {
+      "title": "Contact",
+      "p1": "Pour le support commande, contactez-nous par telephone ou WhatsApp depuis la page de confirmation.",
+      "p2": "Horaires: du samedi au jeudi, de 9h00 a 18h00.",
+      "p3": "Nous repondons generalement le jour meme."
+    }
+  }
+}
+
+

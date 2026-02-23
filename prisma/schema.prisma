@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  en
+  fr
+  ar
+}
+
+enum ProductCategory {
+  pants
+  tshirts
+  shoes
+}
+
+enum OrderStatus {
+  new
+  confirmed
+  shipped
+  delivered
+  canceled
+  returned
+}
+
+enum DeliveryMethod {
+  home
+  stopdesk
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id               String           @id @default(cuid())
+  slug             String           @unique
+  category         ProductCategory
+  titleEn          String
+  titleFr          String
+  titleAr          String
+  descriptionEn    String
+  descriptionFr    String
+  descriptionAr    String
+  priceDzd         Int
+  stock            Int              @default(0)
+  featured         Boolean          @default(false)
+  published        Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  images           ProductImage[]
+  variants         Variant[]
+  orderItems       OrderItem[]
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  altEn     String
+  altFr     String
+  altAr     String
+  colorTag  String?  @map("color_tag")
+  sortOrder Int      @default(0)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Variant {
+  id         String      @id @default(cuid())
+  productId  String
+  size       String
+  color      String      @default("Default")
+  stock      Int         @default(0)
+  sku        String?     @unique
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@unique([productId, size, color])
+}
+
+model ShippingWilaya {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  nameEn        String
+  nameFr        String
+  nameAr        String
+  homePriceDzd  Int      @map("home_price_dzd")
+  stopdeskPriceDzd Int   @map("stopdesk_price_dzd")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  orders        Order[]
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  customerName  String      @map("customer_name")
+  phone         String
+  email         String?
+  wilayaCode    String      @map("wilaya_code")
+  commune       String
+  address       String
+  notes         String?
+  shippingPrice Int         @map("shipping_price")
+  deliveryMethod DeliveryMethod @default(home) @map("delivery_method")
+  deliveryOptionPrice Int   @default(0) @map("delivery_option_price")
+  subtotal      Int
+  total         Int
+  status        OrderStatus @default(new)
+  metaEventId   String?     @map("meta_event_id")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  shippingWilaya ShippingWilaya @relation(fields: [wilayaCode], references: [code])
+  items          OrderItem[]
+}
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  productId   String
+  variantId   String?
+  productName String
+  size        String?
+  color       String?
+  unitPrice   Int
+  quantity    Int
+  lineTotal   Int
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id])
+  variant     Variant? @relation(fields: [variantId], references: [id])
+}
+
+model SiteSettings {
+  id                String   @id @default("main")
+  storeName         String   @default("Noire")
+  storePhone        String?
+  storeWhatsapp     String?
+  storeAddress      String?
+  metaPixelId       String?
+  metaAccessToken   String?
+  metaTestEventCode String?
+  trackingEnabled   Boolean  @default(false)
+  updatedAt         DateTime @updatedAt
+}
