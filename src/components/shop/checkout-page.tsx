@@ -106,7 +106,8 @@ export function CheckoutPageClient({
 
     clearCart();
     setLoading(false);
-    router.push(`/${locale}/order-success/${data.orderId}`);
+    const successId = encodeURIComponent(String(data.orderNumber ?? data.orderId));
+    router.push(`/${locale}/order-success/${successId}`);
   };
 
   const set = (key: string, value: string) => setForm((p) => ({ ...p, [key]: value }));

@@ -2,11 +2,10 @@ import {z} from 'zod';
 import {NextResponse} from 'next/server';
 import {prisma} from '@/lib/db/prisma';
 import {checkRateLimit, getClientIp} from '@/lib/rate-limit';
-import {DeliveryMethod} from '@prisma/client';
 
 const itemSchema = z.object({
-  productId: z.string().min(1),
-  variantId: z.string().optional(),
+  productId: z.union([z.string().min(1), z.number().int().positive()]),
+  variantId: z.union([z.string().min(1), z.number().int().positive()]),
   title: z.string().min(1),
   size: z.string().optional(),
   color: z.string().optional(),
@@ -30,6 +29,11 @@ const payloadSchema = z.object({
 function createOrderNumber() {
   const ts = Date.now().toString().slice(-8);
   return `NR-${ts}`;
+}
+
+function toPositiveInt(value: string | number) {
+  const parsed = Number.parseInt(String(value), 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }
 
 export async function POST(req: Request) {
@@ -64,78 +68,69 @@ export async function POST(req: Request) {
   const subtotal = data.items.reduce((sum, item) => sum + item.priceDzd * item.quantity, 0);
   const total = subtotal + deliveryOptionPrice;
 
-  let order;
+  const inventoryBaseUrl = process.env.INVENTORY_API_BASE_URL?.replace(/\/$/, '');
+  const inventoryApiKey = process.env.INVENTORY_API_KEY;
+  if (!inventoryBaseUrl || !inventoryApiKey) {
+    return NextResponse.json(
+      {error: 'Store API is not configured on this server.'},
+      {status: 500}
+    );
+  }
+
+  const inventoryItems = data.items.map((item) => {
+    const productId = toPositiveInt(item.productId);
+    const variantId = toPositiveInt(item.variantId);
+    if (!productId || !variantId) {
+      throw new Error('Invalid product/variant ids in cart items.');
+    }
+
+    return {
+      product_id: productId,
+      variant_id: variantId,
+      quantity: item.quantity,
+      selling_price: item.priceDzd,
+    };
+  });
+
+  const payload = {
+    customer: {
+      name: data.customerName,
+      phone: data.phone,
+      wilaya: data.wilayaCode,
+      commune: data.commune,
+      address: data.address,
+      deliveryMethod: data.deliveryMethod,
+      notes: data.notes,
+    },
+    items: inventoryItems,
+  };
+
+  let inventoryResponse;
+  let inventoryJson: any;
   try {
-    order = await prisma.$transaction(async (tx) => {
-      for (const item of data.items) {
-        if (item.variantId) {
-          const variant = await tx.variant.findUnique({where: {id: item.variantId}});
-          if (!variant || variant.productId !== item.productId || variant.stock < item.quantity) {
-            throw new Error('Variant out of stock');
-          }
-          await tx.variant.update({
-            where: {id: item.variantId},
-            data: {stock: {decrement: item.quantity}}
-          });
-        } else {
-          const product = await tx.product.findUnique({where: {id: item.productId}});
-          if (!product || product.stock < item.quantity) {
-            throw new Error('Product out of stock');
-          }
-          await tx.product.update({
-            where: {id: item.productId},
-            data: {stock: {decrement: item.quantity}}
-          });
-        }
-      }
-
-      const created = await tx.order.create({
-        data: {
-          orderNumber: createOrderNumber(),
-          customerName: data.customerName,
-          phone: data.phone,
-          email: data.email || null,
-          wilayaCode: data.wilayaCode,
-          commune: data.commune,
-          address: data.address,
-          notes: data.notes,
-          shippingPrice: deliveryOptionPrice,
-          deliveryMethod: data.deliveryMethod as DeliveryMethod,
-          deliveryOptionPrice: 0,
-          subtotal,
-          total,
-          metaEventId: data.eventId,
-          items: {
-            create: data.items.map((item) => ({
-              productId: item.productId,
-              variantId: item.variantId,
-              productName: item.title,
-              size: item.size,
-              color: item.color,
-              unitPrice: item.priceDzd,
-              quantity: item.quantity,
-              lineTotal: item.priceDzd * item.quantity
-            }))
-          }
-        }
-      });
-
-      for (const productId of new Set(data.items.map((item) => item.productId))) {
-        const aggregate = await tx.variant.aggregate({
-          where: {productId},
-          _sum: {stock: true}
-        });
-        await tx.product.update({
-          where: {id: productId},
-          data: {stock: aggregate._sum.stock ?? 0}
-        });
-      }
-
-      return created;
+    inventoryResponse = await fetch(`${inventoryBaseUrl}/api/store/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-STORE-KEY': inventoryApiKey,
+      },
+      body: JSON.stringify(payload),
+      cache: 'no-store',
     });
+    inventoryJson = await inventoryResponse.json().catch(() => ({}));
   } catch (error) {
     return NextResponse.json({error: (error as Error).message}, {status: 400});
   }
 
-  return NextResponse.json({ok: true, orderId: order.id, orderNumber: order.orderNumber});
+  if (!inventoryResponse.ok) {
+    const message = inventoryJson?.error || 'Checkout failed at inventory service.';
+    const status = inventoryResponse.status === 400 ? 400 : 502;
+    return NextResponse.json({error: message}, {status});
+  }
+
+  const created = inventoryJson?.data ?? inventoryJson;
+  const orderId = created?.orderId ? String(created.orderId) : createOrderNumber();
+  const orderNumber = created?.orderNumber ? String(created.orderNumber) : orderId;
+
+  return NextResponse.json({ok: true, orderId, orderNumber});
 }

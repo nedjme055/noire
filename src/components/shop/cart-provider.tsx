@@ -23,9 +23,10 @@ type CartContextValue = {
     productId: string,
     size: string | undefined,
     color: string | undefined,
-    quantity: number
+    quantity: number,
+    variantId?: string
   ) => void;
-  removeItem: (productId: string, size?: string, color?: string) => void;
+  removeItem: (productId: string, size?: string, color?: string, variantId?: string) => void;
   clearCart: () => void;
 };
 
@@ -82,29 +83,34 @@ export function CartProvider({children}: {children: React.ReactNode}) {
         productId: string,
         size: string | undefined,
         color: string | undefined,
-        quantity: number
+        quantity: number,
+        variantId?: string
       ) => {
+        const isTarget = (item: CartItem) => {
+          if (variantId && item.variantId) {
+            return item.variantId === variantId;
+          }
+          return item.productId === productId && item.size === size && item.color === color;
+        };
+
         if (quantity <= 0) {
-          setItems((prev) =>
-            prev.filter(
-              (item) => !(item.productId === productId && item.size === size && item.color === color)
-            )
-          );
+          setItems((prev) => prev.filter((item) => !isTarget(item)));
           return;
         }
 
         setItems((prev) =>
           prev.map((item) =>
-            item.productId === productId && item.size === size && item.color === color
-              ? {...item, quantity}
-              : item
+            isTarget(item) ? {...item, quantity} : item
           )
         );
       },
-      removeItem: (productId: string, size?: string, color?: string) => {
+      removeItem: (productId: string, size?: string, color?: string, variantId?: string) => {
         setItems((prev) =>
           prev.filter(
-            (item) => !(item.productId === productId && item.size === size && item.color === color)
+            (item) =>
+              variantId && item.variantId
+                ? item.variantId !== variantId
+                : !(item.productId === productId && item.size === size && item.color === color)
           )
         );
       },

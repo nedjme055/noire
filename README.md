@@ -142,6 +142,20 @@ npm run build
 ```
 (Verified successfully)
 
+## Inventory Store API integration
+Noire storefront reads products/stock and submits checkout to the inventory backend (`inventory-yalidine`) via Store API:
+
+- `GET /api/store/products`
+- `GET /api/store/products/:id`
+- `POST /api/store/checkout`
+
+Required env vars:
+
+- `INVENTORY_API_BASE_URL` (example: `https://inventory.example.com`)
+- `INVENTORY_API_KEY` (must match inventory server `STORE_API_KEY`)
+
+The checkout API route (`src/app/api/checkout/route.ts`) forwards cart/customer payloads to inventory and returns the created order info.
+
 ## Vercel deployment
 - Add environment variables from `.env.example` in Vercel project settings
 - Use managed Postgres or external Postgres URL for `DATABASE_URL`
