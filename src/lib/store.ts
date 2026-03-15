@@ -1,46 +1,12 @@
-import {ProductCategory, ShippingWilaya} from '@prisma/client';
+import {Product, ProductImage, ProductCategory, ShippingWilaya} from '@prisma/client';
 
 export type Locale = 'en' | 'fr' | 'ar';
 
-export type ProductImageLike = {
-  id: string;
-  productId: string;
-  url: string;
-  altEn: string;
-  altFr: string;
-  altAr: string;
-  colorTag: string | null;
-  sortOrder: number;
+export type ProductWithMedia = Product & {
+  images: ProductImage[];
 };
 
-export type ProductVariantLike = {
-  id: string;
-  productId: string;
-  size: string;
-  color: string;
-  stock: number;
-  sku: string | null;
-};
-
-export type ProductWithMedia = {
-  id: string;
-  slug: string;
-  category: ProductCategory;
-  titleEn: string;
-  titleFr: string;
-  titleAr: string;
-  descriptionEn: string;
-  descriptionFr: string;
-  descriptionAr: string;
-  priceDzd: number;
-  stock: number;
-  featured: boolean;
-  published: boolean;
-  images: ProductImageLike[];
-  variants?: ProductVariantLike[];
-};
-
-export function localizeProduct(product: ProductWithMedia, locale: Locale) {
+export function localizeProduct(product: Product, locale: Locale) {
   if (locale === 'fr') {
     return {
       title: product.titleFr,
