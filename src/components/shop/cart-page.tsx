@@ -78,9 +78,7 @@ export function CartPageClient({ locale }: { locale: string }) {
                   <button
                     type="button"
                     className="flex h-8 w-8 items-center justify-center text-sm text-black/40 transition-colors hover:bg-black/5 hover:text-black"
-                    onClick={() =>
-                      updateQty(item.productId, item.size, item.color, item.quantity - 1, item.variantId)
-                    }
+                    onClick={() => updateQty(item.productId, item.size, item.color, item.quantity - 1)}
                   >
                     −
                   </button>
@@ -90,9 +88,7 @@ export function CartPageClient({ locale }: { locale: string }) {
                   <button
                     type="button"
                     className="flex h-8 w-8 items-center justify-center text-sm text-black/40 transition-colors hover:bg-black/5 hover:text-black"
-                    onClick={() =>
-                      updateQty(item.productId, item.size, item.color, item.quantity + 1, item.variantId)
-                    }
+                    onClick={() => updateQty(item.productId, item.size, item.color, item.quantity + 1)}
                   >
                     +
                   </button>
@@ -102,7 +98,7 @@ export function CartPageClient({ locale }: { locale: string }) {
                 <button
                   type="button"
                   className="text-[12px] text-black/35 transition-colors hover:text-red-500"
-                  onClick={() => removeItem(item.productId, item.size, item.color, item.variantId)}
+                  onClick={() => removeItem(item.productId, item.size, item.color)}
                 >
                   {t('remove')}
                 </button>
