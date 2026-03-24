@@ -1,29 +1,59 @@
-import {Product, ProductImage, ProductCategory, ShippingWilaya} from '@prisma/client';
+import { ShippingWilaya } from '@prisma/client';
 
 export type Locale = 'en' | 'fr' | 'ar';
 
-export type ProductWithMedia = Product & {
-  images: ProductImage[];
+export type ProductCategory = 'tshirts' | 'pants' | 'shoes';
+
+export type ProductImage = {
+  url: string;
+  altEn?: string | null;
+  altFr?: string | null;
+  altAr?: string | null;
+  colorTag?: string | null;
 };
 
-export function localizeProduct(product: Product, locale: Locale) {
+export type ProductVariant = {
+  id: string;
+  size: string;
+  color: string;
+  stock: number;
+};
+
+export type ProductWithMedia = {
+  id: string;
+  slug: string;
+  category: ProductCategory;
+  priceDzd: number;
+  stock: number;
+  published: boolean;
+  titleEn: string;
+  titleFr: string;
+  titleAr: string;
+  descriptionEn?: string | null;
+  descriptionFr?: string | null;
+  descriptionAr?: string | null;
+  images: ProductImage[];
+  variants: ProductVariant[];
+};
+
+export function localizeProduct(product: ProductWithMedia, locale: Locale) {
   if (locale === 'fr') {
     return {
       title: product.titleFr,
-      description: product.descriptionFr
+      description: product.descriptionFr || ''
     };
   }
 
   if (locale === 'ar') {
     return {
       title: product.titleAr,
-      description: product.descriptionAr
+      description: product.descriptionAr || ''
     };
   }
 
   return {
     title: product.titleEn,
-    description: product.descriptionEn
+    description: product.descriptionEn || ''
   };
 }
 

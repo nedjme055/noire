@@ -43,7 +43,7 @@ export function CartPageClient({ locale }: { locale: string }) {
           const itemImage = item.image?.trim() ? item.image : FALLBACK_PRODUCT_IMAGE;
           return (
           <article
-            key={`${item.productId}-${item.size}-${item.color}`}
+            key={item.variantId ?? `${item.productId}-${item.size}-${item.color}`}
             className="flex gap-4 border-b border-black/[0.06] py-5 sm:gap-6"
           >
             {/* Product image */}
@@ -78,7 +78,9 @@ export function CartPageClient({ locale }: { locale: string }) {
                   <button
                     type="button"
                     className="flex h-8 w-8 items-center justify-center text-sm text-black/40 transition-colors hover:bg-black/5 hover:text-black"
-                    onClick={() => updateQty(item.productId, item.size, item.color, item.quantity - 1)}
+                    onClick={() =>
+                      updateQty(item.productId, item.size, item.color, item.quantity - 1, item.variantId)
+                    }
                   >
                     −
                   </button>
@@ -88,7 +90,9 @@ export function CartPageClient({ locale }: { locale: string }) {
                   <button
                     type="button"
                     className="flex h-8 w-8 items-center justify-center text-sm text-black/40 transition-colors hover:bg-black/5 hover:text-black"
-                    onClick={() => updateQty(item.productId, item.size, item.color, item.quantity + 1)}
+                    onClick={() =>
+                      updateQty(item.productId, item.size, item.color, item.quantity + 1, item.variantId)
+                    }
                   >
                     +
                   </button>
@@ -98,7 +102,7 @@ export function CartPageClient({ locale }: { locale: string }) {
                 <button
                   type="button"
                   className="text-[12px] text-black/35 transition-colors hover:text-red-500"
-                  onClick={() => removeItem(item.productId, item.size, item.color)}
+                  onClick={() => removeItem(item.productId, item.size, item.color, item.variantId)}
                 >
                   {t('remove')}
                 </button>

@@ -1,17 +1,16 @@
 import { notFound } from 'next/navigation';
 import { Link } from '@/lib/i18n/routing';
-import { prisma } from '@/lib/db/prisma';
 
 export default async function OrderSuccessPage({
   params,
 }: {
   params: { locale: string; id: string };
 }) {
-  const order = await prisma.order.findUnique({ where: { id: params.id } });
-  if (!order) notFound();
+  if (!params.id) notFound();
+  const orderNumber = params.id;
 
   const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-  const text = encodeURIComponent(`Order ${order.orderNumber} submitted. Name: ${order.customerName}`);
+  const text = encodeURIComponent(`Order ${orderNumber} submitted.`);
 
   return (
     <div className="container-mobile py-20 text-center">
@@ -37,7 +36,7 @@ export default async function OrderSuccessPage({
         {/* Order number card */}
         <div className="rounded-xl border border-black/[0.06] bg-[#FAFAF8] px-6 py-5">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-black/35">Order Number</p>
-          <p className="mt-1.5 text-[20px] font-semibold tracking-wide text-ink">{order.orderNumber}</p>
+          <p className="mt-1.5 text-[20px] font-semibold tracking-wide text-ink">{orderNumber}</p>
         </div>
 
         {/* Actions */}

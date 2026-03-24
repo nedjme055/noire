@@ -101,6 +101,12 @@ npm install
 ```bash
 cp .env.example .env
 ```
+Add inventory integration vars in `.env`:
+
+```bash
+INVENTORY_API_BASE_URL="https://your-inventory-domain"
+INVENTORY_API_KEY="replace_with_store_secret"
+```
 3. Start PostgreSQL with Docker:
 ```bash
 docker compose up -d

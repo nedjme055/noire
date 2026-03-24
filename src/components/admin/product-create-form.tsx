@@ -210,8 +210,8 @@ export function ProductCreateForm({
 
   const resetForm = () => {
     setSlug(''); setSlugManual(false); setCategory('tshirts'); setPriceDzd('');
-    setFeatured(false); setTitleEn(''); setTitleFr(''); setTitleAr('');
-    setDescEn(''); setDescFr(''); setDescAr('');
+    setFeatured(false); setTitleEn('');
+    setDescEn('');
     setColors(['Black']); setNewColor('');
     setGeneralImages([]); setColorImages([]);
     setErrors({});

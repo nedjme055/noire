@@ -23,9 +23,10 @@ type CartContextValue = {
     productId: string,
     size: string | undefined,
     color: string | undefined,
-    quantity: number
+    quantity: number,
+    variantId?: string
   ) => void;
-  removeItem: (productId: string, size?: string, color?: string) => void;
+  removeItem: (productId: string, size?: string, color?: string, variantId?: string) => void;
   clearCart: () => void;
 };
 
@@ -37,7 +38,7 @@ function isSameCartLine(
   a: Pick<CartItem, 'variantId' | 'productId' | 'size' | 'color'>,
   b: Pick<CartItem, 'variantId' | 'productId' | 'size' | 'color'>
 ) {
-  if (a.variantId && b.variantId) return a.variantId === b.variantId;
+  if (a.variantId || b.variantId) return Boolean(a.variantId && b.variantId && a.variantId === b.variantId);
   return a.productId === b.productId && a.size === b.size && a.color === b.color;
 }
 
@@ -82,12 +83,17 @@ export function CartProvider({children}: {children: React.ReactNode}) {
         productId: string,
         size: string | undefined,
         color: string | undefined,
-        quantity: number
+        quantity: number,
+        variantId?: string
       ) => {
         if (quantity <= 0) {
           setItems((prev) =>
             prev.filter(
-              (item) => !(item.productId === productId && item.size === size && item.color === color)
+              (item) =>
+                !(
+                  (variantId && item.variantId === variantId) ||
+                  (!variantId && item.productId === productId && item.size === size && item.color === color)
+                )
             )
           );
           return;
@@ -95,16 +101,21 @@ export function CartProvider({children}: {children: React.ReactNode}) {
 
         setItems((prev) =>
           prev.map((item) =>
-            item.productId === productId && item.size === size && item.color === color
-              ? {...item, quantity}
+            (variantId && item.variantId === variantId) ||
+            (!variantId && item.productId === productId && item.size === size && item.color === color)
+              ? { ...item, quantity }
               : item
           )
         );
       },
-      removeItem: (productId: string, size?: string, color?: string) => {
+      removeItem: (productId: string, size?: string, color?: string, variantId?: string) => {
         setItems((prev) =>
           prev.filter(
-            (item) => !(item.productId === productId && item.size === size && item.color === color)
+            (item) =>
+              !(
+                (variantId && item.variantId === variantId) ||
+                (!variantId && item.productId === productId && item.size === size && item.color === color)
+              )
           )
         );
       },
