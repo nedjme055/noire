@@ -79,6 +79,7 @@ export function ProductCreateForm({
   const [slugManual, setSlugManual] = useState(false);
   const [category, setCategory] = useState<string>('tshirts');
   const [priceDzd, setPriceDzd] = useState('');
+  const [promotionPriceDzd, setPromotionPriceDzd] = useState('');
   const [featured, setFeatured] = useState(false);
   const [titleEn, setTitleEn] = useState('');
   const [descEn, setDescEn] = useState('');
@@ -157,12 +158,15 @@ export function ProductCreateForm({
     if (!titleEn.trim()) e.titleEn = 'Product name is required';
     if (!descEn.trim()) e.descEn = 'Description is required';
     if (!priceDzd || Number(priceDzd) <= 0) e.priceDzd = 'Price must be greater than 0';
+    if (promotionPriceDzd && Number(promotionPriceDzd) >= Number(priceDzd)) {
+      e.promotionPriceDzd = 'Promotion price must be lower than the regular price';
+    }
     if (colors.length === 0) e.colors = 'Add at least one color';
     const total = generalImages.length + colorImages.reduce((a, g) => a + g.files.length, 0);
     if (total === 0) e.images = 'Upload at least one image';
     setErrors(e);
     return Object.keys(e).length === 0;
-  }, [slug, titleEn, descEn, priceDzd, colors, generalImages, colorImages]);
+  }, [slug, titleEn, descEn, priceDzd, promotionPriceDzd, colors, generalImages, colorImages]);
 
   // ─── Submit ───
   const handleSubmit = () => {
@@ -175,6 +179,7 @@ export function ProductCreateForm({
     fd.append('slug', slug);
     fd.append('category', category);
     fd.append('priceDzd', priceDzd);
+    if (promotionPriceDzd.trim()) fd.append('promotionPriceDzd', promotionPriceDzd);
     fd.append('titleEn', titleEn);
     fd.append('titleFr', titleEn);
     fd.append('titleAr', titleEn);
@@ -209,7 +214,7 @@ export function ProductCreateForm({
   };
 
   const resetForm = () => {
-    setSlug(''); setSlugManual(false); setCategory('tshirts'); setPriceDzd('');
+    setSlug(''); setSlugManual(false); setCategory('tshirts'); setPriceDzd(''); setPromotionPriceDzd('');
     setFeatured(false); setTitleEn('');
     setDescEn('');
     setColors(['Black']); setNewColor('');
@@ -276,6 +281,12 @@ export function ProductCreateForm({
               <input type="number" value={priceDzd} onChange={(e) => setPriceDzd(e.target.value)}
                 placeholder="e.g. 4500" className={`admin-input ${errors.priceDzd ? 'border-red-400' : ''}`} />
               {errors.priceDzd && <p className="text-[11px] text-red-500 mt-1">{errors.priceDzd}</p>}
+            </div>
+            <div className="admin-field">
+              <label className="admin-label">Promotion Price (DZD)</label>
+              <input type="number" value={promotionPriceDzd} onChange={(e) => setPromotionPriceDzd(e.target.value)}
+                placeholder="Optional, e.g. 3900" className={`admin-input ${errors.promotionPriceDzd ? 'border-red-400' : ''}`} />
+              {errors.promotionPriceDzd && <p className="text-[11px] text-red-500 mt-1">{errors.promotionPriceDzd}</p>}
             </div>
           </div>
 

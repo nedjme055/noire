@@ -53,6 +53,7 @@ model Product {
   descriptionFr    String
   descriptionAr    String
   priceDzd         Int
+  promotionPriceDzd Int?            @map("promotion_price_dzd")
   stock            Int              @default(0)
   featured         Boolean          @default(false)
   published        Boolean          @default(true)

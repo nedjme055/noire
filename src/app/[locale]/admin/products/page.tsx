@@ -5,6 +5,7 @@ import { AdminShell } from '@/components/admin/admin-shell';
 import { ProductCreateForm } from '@/components/admin/product-create-form';
 import { requireAdmin } from '@/lib/auth/guard';
 import { prisma } from '@/lib/db/prisma';
+import { getPromotionPriceDzd } from '@/lib/store';
 import { saveUploadedImages } from '@/lib/uploads';
 
 type VariantInput = { size: string; color: string; stock: number };
@@ -59,6 +60,19 @@ function sanitizeVariants(raw: VariantInput[]) {
   return Array.from(map.values());
 }
 
+function parsePromotionPrice(value: FormDataEntryValue | null, priceDzd: number) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return null;
+  const promotionPriceDzd = Number(raw);
+  if (!Number.isFinite(promotionPriceDzd) || promotionPriceDzd <= 0) {
+    throw new Error('Promotion price must be greater than 0');
+  }
+  if (promotionPriceDzd >= priceDzd) {
+    throw new Error('Promotion price must be lower than the regular price');
+  }
+  return Math.round(promotionPriceDzd);
+}
+
 async function syncProductStock(productId: string) {
   const aggregate = await prisma.variant.aggregate({ where: { productId }, _sum: { stock: true } });
   await prisma.product.update({ where: { id: productId }, data: { stock: aggregate._sum.stock ?? 0 } });
@@ -68,10 +82,13 @@ async function createProduct(formData: FormData) {
   'use server';
   const category = formData.get('category') as ProductCategory;
   const slug = String(formData.get('slug') ?? '').trim();
+  const priceDzd = Number(formData.get('priceDzd') ?? 0);
+  const promotionPriceDzd = parsePromotionPrice(formData.get('promotionPriceDzd'), priceDzd);
   const variantsJson = String(formData.get('variantsJson') ?? '[]');
   const parsedVariants = sanitizeVariants(JSON.parse(variantsJson) as VariantInput[]);
 
   if (!slug) throw new Error('Slug is required');
+  if (!Number.isFinite(priceDzd) || priceDzd <= 0) throw new Error('Price must be greater than 0');
   const existing = await prisma.product.findUnique({ where: { slug }, select: { id: true } });
   if (existing) throw new Error(`Slug "${slug}" already exists. Please choose a different slug.`);
 
@@ -93,7 +110,8 @@ async function createProduct(formData: FormData) {
         slug, category,
         titleEn: String(formData.get('titleEn') ?? ''), titleFr: String(formData.get('titleFr') ?? ''), titleAr: String(formData.get('titleAr') ?? ''),
         descriptionEn: String(formData.get('descriptionEn') ?? ''), descriptionFr: String(formData.get('descriptionFr') ?? ''), descriptionAr: String(formData.get('descriptionAr') ?? ''),
-        priceDzd: Number(formData.get('priceDzd') ?? 0),
+        priceDzd,
+        promotionPriceDzd,
         stock: parsedVariants.reduce((sum, v) => sum + v.stock, 0),
         featured: formData.get('featured') === 'on',
         published: true,
@@ -122,9 +140,16 @@ async function createProduct(formData: FormData) {
 async function updateProduct(formData: FormData) {
   'use server';
   const id = String(formData.get('id'));
+  const priceDzd = Number(formData.get('priceDzd') ?? 0);
+  if (!Number.isFinite(priceDzd) || priceDzd <= 0) throw new Error('Price must be greater than 0');
   await prisma.product.update({
     where: { id },
-    data: { priceDzd: Number(formData.get('priceDzd') ?? 0), featured: formData.get('featured') === 'on', published: formData.get('published') === 'on' }
+    data: {
+      priceDzd,
+      promotionPriceDzd: parsePromotionPrice(formData.get('promotionPriceDzd'), priceDzd),
+      featured: formData.get('featured') === 'on',
+      published: formData.get('published') === 'on'
+    }
   });
   revalidatePath('/');
 }
@@ -232,6 +257,7 @@ export default async function AdminProductsPage({ params }: { params: { locale: 
           const totalVariantStock = product.variants.reduce((a, v) => a + v.stock, 0);
           const isLowStock = totalVariantStock > 0 && totalVariantStock <= 5;
           const isOutOfStock = totalVariantStock === 0;
+          const promotionPriceDzd = getPromotionPriceDzd(product);
 
           return (
             <div key={product.id} className="admin-card overflow-hidden">
@@ -280,12 +306,26 @@ export default async function AdminProductsPage({ params }: { params: { locale: 
                   </div>
                   <p className="mt-0.5 text-[12px] text-black/40 font-mono">{product.slug}</p>
                   <div className="mt-1.5 flex items-center gap-3">
-                    <span className="text-[14px] font-semibold text-black">{product.priceDzd.toLocaleString()} DZD</span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-[14px] font-semibold text-black">
+                        {(promotionPriceDzd ?? product.priceDzd).toLocaleString()} DZD
+                      </span>
+                      {promotionPriceDzd ? (
+                        <span className="text-[12px] text-black/35 line-through">
+                          {product.priceDzd.toLocaleString()} DZD
+                        </span>
+                      ) : null}
+                    </div>
                     <span className={`inline-flex items-center gap-1 text-[12px] font-medium ${isOutOfStock ? 'text-red-600' : isLowStock ? 'text-amber-600' : 'text-green-700'
                       }`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${isOutOfStock ? 'bg-red-500' : isLowStock ? 'bg-amber-500' : 'bg-green-500'}`} />
                       {isOutOfStock ? 'Out of stock' : `${totalVariantStock} in stock`}
                     </span>
+                    {promotionPriceDzd ? (
+                      <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-600">
+                        Promo
+                      </span>
+                    ) : null}
                     {product.images.length > 0 && (
                       <span className="text-[11px] text-black/35">📷 {product.images.length} image{product.images.length !== 1 ? 's' : ''}</span>
                     )}
@@ -298,7 +338,7 @@ export default async function AdminProductsPage({ params }: { params: { locale: 
                 </div>
               </div>
 
-              {/* Quick edit: price + toggles */}
+              {/* Quick edit: price + promo + toggles */}
               <form action={updateProduct} className="flex flex-wrap items-center gap-3 border-b border-black/8 px-4 py-3">
                 <input type="hidden" name="id" value={product.id} />
                 <div className="flex items-center gap-2">
@@ -307,6 +347,17 @@ export default async function AdminProductsPage({ params }: { params: { locale: 
                     name="priceDzd"
                     type="number"
                     defaultValue={product.priceDzd}
+                    className="admin-input-sm w-28"
+                  />
+                  <span className="text-[12px] text-black/40">DZD</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-[12px] text-black/40">Promo</label>
+                  <input
+                    name="promotionPriceDzd"
+                    type="number"
+                    defaultValue={product.promotionPriceDzd ?? ''}
+                    placeholder="Optional"
                     className="admin-input-sm w-28"
                   />
                   <span className="text-[12px] text-black/40">DZD</span>

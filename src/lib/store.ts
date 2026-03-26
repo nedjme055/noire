@@ -24,6 +24,7 @@ export type ProductWithMedia = {
   slug: string;
   category: ProductCategory;
   priceDzd: number;
+  promotionPriceDzd?: number | null;
   stock: number;
   published: boolean;
   titleEn: string;
@@ -55,6 +56,21 @@ export function localizeProduct(product: ProductWithMedia, locale: Locale) {
     title: product.titleEn,
     description: product.descriptionEn || ''
   };
+}
+
+export function getPromotionPriceDzd(product: Pick<ProductWithMedia, 'priceDzd' | 'promotionPriceDzd'>) {
+  const promotionPriceDzd = Number(product.promotionPriceDzd ?? 0);
+  if (!Number.isFinite(promotionPriceDzd) || promotionPriceDzd <= 0) return null;
+  if (promotionPriceDzd >= product.priceDzd) return null;
+  return promotionPriceDzd;
+}
+
+export function getEffectivePriceDzd(product: Pick<ProductWithMedia, 'priceDzd' | 'promotionPriceDzd'>) {
+  return getPromotionPriceDzd(product) ?? product.priceDzd;
+}
+
+export function hasPromotionPrice(product: Pick<ProductWithMedia, 'priceDzd' | 'promotionPriceDzd'>) {
+  return getPromotionPriceDzd(product) !== null;
 }
 
 export function localizeWilaya(wilaya: ShippingWilaya, locale: Locale) {

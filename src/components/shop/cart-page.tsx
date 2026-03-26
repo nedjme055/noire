@@ -69,7 +69,14 @@ export function CartPageClient({ locale }: { locale: string }) {
                     )}
                   </div>
                 </div>
-                <p className="shrink-0 text-[14px] font-semibold text-ink">{formatDzd(item.priceDzd * item.quantity, locale)}</p>
+                <div className="shrink-0 text-right">
+                  <p className="text-[14px] font-semibold text-ink">{formatDzd(item.priceDzd * item.quantity, locale)}</p>
+                  {item.originalPriceDzd && item.originalPriceDzd > item.priceDzd ? (
+                    <p className="text-[11px] text-black/35 line-through">
+                      {formatDzd(item.originalPriceDzd * item.quantity, locale)}
+                    </p>
+                  ) : null}
+                </div>
               </div>
 
               <div className="mt-4 flex items-center justify-between">

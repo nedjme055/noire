@@ -15,6 +15,7 @@ type CartPopupProps = {
         size?: string;
         color?: string;
         priceDzd: number;
+        originalPriceDzd?: number | null;
         quantity: number;
     } | null;
     locale: string;
@@ -96,7 +97,12 @@ export function CartPopup({ isOpen, onClose, item, locale }: CartPopupProps) {
                                     <span>{t('quantity')}: {item.quantity}</span>
                                 </div>
                             </div>
-                            <p className="text-[13px] font-semibold">{formatDzd(item.priceDzd, locale)}</p>
+                            <div className="flex items-baseline gap-2">
+                                <p className="text-[13px] font-semibold">{formatDzd(item.priceDzd, locale)}</p>
+                                {item.originalPriceDzd && item.originalPriceDzd > item.priceDzd ? (
+                                    <p className="text-[11px] text-black/35 line-through">{formatDzd(item.originalPriceDzd, locale)}</p>
+                                ) : null}
+                            </div>
                         </div>
                     </div>
 
