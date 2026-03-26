@@ -11,7 +11,6 @@ export type CartItem = {
   size?: string;
   color?: string;
   priceDzd: number;
-  originalPriceDzd?: number | null;
   quantity: number;
 };
 

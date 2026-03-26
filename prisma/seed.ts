@@ -110,7 +110,6 @@ async function main() {
       descriptionFr: 'Pantalon premium structure pour une silhouette nette.',
       descriptionAr: '????? ???? ???? ????? ??????.',
       priceDzd: 9800,
-      promotionPriceDzd: 8400,
       stock: 24,
       featured: true,
       image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=1200'
@@ -125,7 +124,6 @@ async function main() {
       descriptionFr: 'T-shirt oversize en coton epais avec branding minimal.',
       descriptionAr: '???? ???? ???? ????? ????? ????? ????.',
       priceDzd: 5200,
-      promotionPriceDzd: null,
       stock: 40,
       featured: true,
       image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200'
@@ -140,7 +138,6 @@ async function main() {
       descriptionFr: 'Sneaker monochrome confortable toute la journee.',
       descriptionAr: '???? ????? ????? ???? ?????? ???????.',
       priceDzd: 14900,
-      promotionPriceDzd: 12900,
       stock: 18,
       featured: true,
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200'
@@ -159,7 +156,6 @@ async function main() {
         descriptionFr: product.descriptionFr,
         descriptionAr: product.descriptionAr,
         priceDzd: product.priceDzd,
-        promotionPriceDzd: product.promotionPriceDzd,
         stock: product.stock,
         featured: product.featured,
         published: true
@@ -174,7 +170,6 @@ async function main() {
         descriptionFr: product.descriptionFr,
         descriptionAr: product.descriptionAr,
         priceDzd: product.priceDzd,
-        promotionPriceDzd: product.promotionPriceDzd,
         stock: product.stock,
         featured: product.featured,
         published: true,

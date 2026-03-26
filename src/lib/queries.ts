@@ -13,10 +13,6 @@ type InventoryProduct = {
   model_name: string;
   category: string;
   selling_price: number;
-  promotion_price?: number | null;
-  promo_price?: number | null;
-  sale_price?: number | null;
-  discount_price?: number | null;
   image?: string | null;
   variants: InventoryVariant[];
 };
@@ -76,25 +72,6 @@ function normalizeImageUrl(image?: string | null) {
   return buildUrl(image.startsWith('/') ? image : `/${image}`);
 }
 
-function normalizePromotionPrice(product: InventoryProduct) {
-  const regularPrice = Math.round(Number(product.selling_price || 0));
-  const rawPromotionPrice =
-    product.promotion_price ??
-    product.promo_price ??
-    product.sale_price ??
-    product.discount_price ??
-    null;
-
-  if (rawPromotionPrice == null) return null;
-
-  const promotionPrice = Math.round(Number(rawPromotionPrice));
-  if (!Number.isFinite(promotionPrice) || promotionPrice <= 0 || promotionPrice >= regularPrice) {
-    return null;
-  }
-
-  return promotionPrice;
-}
-
 function mapInventoryProduct(product: InventoryProduct): ProductWithMedia {
   const variants = product.variants.map((v) => ({
     id: String(v.id),
@@ -109,7 +86,6 @@ function mapInventoryProduct(product: InventoryProduct): ProductWithMedia {
     slug: slugForProduct(product),
     category: mapCategory(product.category),
     priceDzd: Math.round(Number(product.selling_price || 0)),
-    promotionPriceDzd: normalizePromotionPrice(product),
     stock,
     published: true,
     titleEn: product.model_name,

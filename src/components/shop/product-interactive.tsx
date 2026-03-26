@@ -14,11 +14,10 @@ type Props = {
     title: string;
     images: GalleryImage[];
     priceDzd: number;
-    originalPriceDzd?: number | null;
     variants: Variant[];
 };
 
-export function ProductInteractive({ productId, slug, title, images, priceDzd, originalPriceDzd, variants }: Props) {
+export function ProductInteractive({ productId, slug, title, images, priceDzd, variants }: Props) {
     const [selectedColor, setSelectedColor] = useState<string | undefined>(
         variants.filter((v) => v.stock > 0)[0]?.color
     );
@@ -40,7 +39,6 @@ export function ProductInteractive({ productId, slug, title, images, priceDzd, o
                 image={images[0]?.url ?? FALLBACK_PRODUCT_IMAGE}
                 images={images}
                 priceDzd={priceDzd}
-                originalPriceDzd={originalPriceDzd}
                 variants={variants}
                 onColorChange={setSelectedColor}
             />

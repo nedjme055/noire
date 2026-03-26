@@ -1,14 +1,12 @@
 import Image from 'next/image';
 import { Link } from '@/lib/i18n/routing';
-import { ProductWithMedia, getEffectivePriceDzd, getPromotionPriceDzd, localizeProduct, Locale } from '@/lib/store';
+import { ProductWithMedia, localizeProduct, Locale } from '@/lib/store';
 import { formatDzd } from '@/lib/utils';
 
 export function ProductCard({ product, locale }: { product: ProductWithMedia; locale: Locale }) {
   const i18n = localizeProduct(product, locale);
   const image = product.images[0]?.url ?? 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=900';
   const totalStock = product.stock ?? 0;
-  const promotionPriceDzd = getPromotionPriceDzd(product);
-  const effectivePriceDzd = getEffectivePriceDzd(product);
 
   return (
     <Link href={`/${locale}/product/${product.slug}`} className="group block">
@@ -31,12 +29,6 @@ export function ProductCard({ product, locale }: { product: ProductWithMedia; lo
             New
           </span>
 
-          {promotionPriceDzd ? (
-            <span className="absolute right-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
-              Promo
-            </span>
-          ) : null}
-
           {/* Out of stock overlay */}
           {totalStock === 0 && (
             <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px]">
@@ -53,12 +45,7 @@ export function ProductCard({ product, locale }: { product: ProductWithMedia; lo
             {i18n.title}
           </h3>
           <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-2">
-              <p className="text-[13px] font-semibold text-black/70">{formatDzd(effectivePriceDzd, locale)}</p>
-              {promotionPriceDzd ? (
-                <p className="text-[11px] text-black/35 line-through">{formatDzd(product.priceDzd, locale)}</p>
-              ) : null}
-            </div>
+            <p className="text-[13px] font-semibold text-black/70">{formatDzd(product.priceDzd, locale)}</p>
           </div>
         </div>
       </article>
