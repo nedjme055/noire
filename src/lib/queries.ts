@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db/prisma';
-import { ProductCategory, ProductWithMedia } from '@/lib/store';
+import { ProductCategory, ProductWithMedia, getPromotionPrice } from '@/lib/store';
 
 type InventoryVariant = {
   id: number;
@@ -150,6 +150,11 @@ export async function getSiteSettings() {
 export async function getFeaturedProducts() {
   const products = await getInventoryProducts();
   return products.slice(0, 6);
+}
+
+export async function getPromotionProducts(limit = 4) {
+  const products = await getInventoryProducts();
+  return products.filter((product) => getPromotionPrice(product)).slice(0, limit);
 }
 
 export async function getNewDropProducts() {
