@@ -24,6 +24,7 @@ export type ProductWithMedia = {
   slug: string;
   category: ProductCategory;
   priceDzd: number;
+  promotionPriceDzd?: number | null;
   stock: number;
   published: boolean;
   titleEn: string;
@@ -55,6 +56,16 @@ export function localizeProduct(product: ProductWithMedia, locale: Locale) {
     title: product.titleEn,
     description: product.descriptionEn || ''
   };
+}
+
+export function getPromotionPrice(product: ProductWithMedia) {
+  const promotion = Number(product.promotionPriceDzd ?? 0);
+  if (!Number.isFinite(promotion) || promotion <= 0 || promotion >= product.priceDzd) return null;
+  return promotion;
+}
+
+export function getEffectivePrice(product: ProductWithMedia) {
+  return getPromotionPrice(product) ?? product.priceDzd;
 }
 
 export function localizeWilaya(wilaya: ShippingWilaya, locale: Locale) {

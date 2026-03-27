@@ -13,6 +13,10 @@ type InventoryProduct = {
   model_name: string;
   category: string;
   selling_price: number;
+  promotion_price?: number | null;
+  promo_price?: number | null;
+  sale_price?: number | null;
+  discount_price?: number | null;
   image?: string | null;
   variants: InventoryVariant[];
 };
@@ -81,11 +85,25 @@ function mapInventoryProduct(product: InventoryProduct): ProductWithMedia {
   }));
   const stock = variants.reduce((sum, v) => sum + v.stock, 0);
 
+  const basePrice = Math.round(Number(product.selling_price || 0));
+  const promotionRaw =
+    product.promotion_price ??
+    product.promo_price ??
+    product.sale_price ??
+    product.discount_price ??
+    null;
+  const promotionParsed = promotionRaw == null ? null : Math.round(Number(promotionRaw));
+  const promotionPriceDzd =
+    Number.isFinite(promotionParsed) && promotionParsed > 0 && promotionParsed < basePrice
+      ? promotionParsed
+      : null;
+
   return {
     id: String(product.id),
     slug: slugForProduct(product),
     category: mapCategory(product.category),
-    priceDzd: Math.round(Number(product.selling_price || 0)),
+    priceDzd: basePrice,
+    promotionPriceDzd,
     stock,
     published: true,
     titleEn: product.model_name,
