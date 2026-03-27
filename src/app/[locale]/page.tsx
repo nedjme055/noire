@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { getFeaturedProducts, getPromotionProducts } from '@/lib/queries';
+import { Link } from '@/lib/i18n/routing';
 import { Hero } from '@/components/shop/hero';
 import { TrustBadges } from '@/components/shop/trust-badges';
 import { ProductCard } from '@/components/shop/product-card';
@@ -50,6 +51,12 @@ export default async function HomePage({ params }: { params: { locale: 'en' | 'f
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-black/45">{t('promotionsSubtitle')}</p>
                 <h2 className="section-heading mt-2">{t('promotions')}</h2>
               </div>
+              <Link
+                href={`/${locale}/best-sales`}
+                className="inline-flex items-center rounded-full border border-black/20 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65 transition-colors hover:border-black hover:text-black"
+              >
+                {t('promotionsCta')}
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-5 sm:gap-y-10">
