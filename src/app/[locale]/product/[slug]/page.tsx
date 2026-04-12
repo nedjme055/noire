@@ -24,6 +24,11 @@ export default async function ProductPage({
   const i18n = localizeProduct(product, locale);
   const promotionPrice = getPromotionPrice(product);
   const effectivePrice = getEffectivePrice(product);
+  const fallbackDescription =
+    locale === 'fr'
+      ? `${i18n.title} de Noire. Piece premium concue pour un usage quotidien.`
+      : `${i18n.title} by Noire. Premium quality, designed for everyday wear.`;
+  const descriptionText = (i18n.description || '').trim() || fallbackDescription;
 
   // Build image list with colorHint from colorTag or alt text
   const images = product.images.map((img) => ({
@@ -79,7 +84,7 @@ export default async function ProductPage({
             </div>
           </div>
 
-          <p className="text-[13px] leading-7 text-black/60">{i18n.description}</p>
+          <p className="text-[13px] leading-7 text-black/60">{descriptionText}</p>
 
           {/* Stock */}
           <div>
