@@ -48,7 +48,11 @@
     "stockForVariant": "{count} left for selected size/color",
     "addedTitle": "Added to your bag",
     "goToCart": "Go to Cart",
-    "continueShopping": "Continue shopping"
+    "continueShopping": "Continue shopping",
+    "bundleOfferTitle": "Buy a T-Shirt + Pants and get 10% OFF",
+    "bundleOfferTitlePants": "Buy Pants + a T-Shirt and get 10% OFF",
+    "bundleOfferSubtitle": "Discount applied automatically at checkout",
+    "outOfStock": "Out of stock"
   },
   "cart": {
     "empty": "Your cart is empty",
@@ -59,7 +63,8 @@
     "subtotal": "Subtotal",
     "shippingNote": "Shipping is calculated by wilaya at checkout.",
     "checkout": "Proceed to checkout",
-    "title": "Your Bag"
+    "title": "Your Bag",
+    "bundleDiscount": "Bundle Offer -10%"
   },
   "checkout": {
     "title": "Checkout",
@@ -71,6 +76,7 @@
     "address": "Address",
     "notes": "Notes",
     "subtotal": "Subtotal",
+    "bundleDiscount": "Bundle Offer -10%",
     "shipping": "Shipping",
     "total": "Total",
     "placing": "Placing order...",

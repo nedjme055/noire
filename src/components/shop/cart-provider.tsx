@@ -10,6 +10,7 @@ export type CartItem = {
   image: string;
   size?: string;
   color?: string;
+  category?: string;
   priceDzd: number;
   quantity: number;
 };
@@ -18,6 +19,7 @@ type CartContextValue = {
   items: CartItem[];
   count: number;
   subtotal: number;
+  bundleDiscount: number;
   addItem: (item: CartItem) => void;
   updateQty: (
     productId: string,
@@ -64,10 +66,15 @@ export function CartProvider({children}: {children: React.ReactNode}) {
     const subtotal = items.reduce((sum, item) => sum + item.priceDzd * item.quantity, 0);
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
+    const hasTshirt = items.some((item) => item.category === 'tshirts');
+    const hasPants = items.some((item) => item.category === 'pants');
+    const bundleDiscount = hasTshirt && hasPants ? Math.round(subtotal * 0.1) : 0;
+
     return {
       items,
       count,
       subtotal,
+      bundleDiscount,
       addItem: (item: CartItem) => {
         setItems((prev) => {
           const idx = prev.findIndex((existing) => isSameCartLine(existing, item));
