@@ -9,6 +9,7 @@ const itemSchema = z.object({
   title: z.string().min(1),
   size: z.string().optional(),
   color: z.string().optional(),
+  category: z.string().optional(),
   priceDzd: z.number().int().positive(),
   quantity: z.number().int().positive()
 });
@@ -59,7 +60,12 @@ export async function POST(req: Request) {
     data.deliveryMethod === 'stopdesk' ? shipping.stopdeskPriceDzd : shipping.homePriceDzd;
 
   const subtotal = data.items.reduce((sum, item) => sum + item.priceDzd * item.quantity, 0);
-  const total = subtotal + deliveryOptionPrice;
+
+  const hasTshirt = data.items.some((item) => item.category === 'tshirts');
+  const hasPants = data.items.some((item) => item.category === 'pants');
+  const bundleDiscount = hasTshirt && hasPants ? Math.round(subtotal * 0.1) : 0;
+
+  const total = subtotal - bundleDiscount + deliveryOptionPrice;
 
   const baseUrl = process.env.INVENTORY_API_BASE_URL;
   if (!baseUrl) {

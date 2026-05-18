@@ -12,12 +12,13 @@ type Props = {
     productId: string;
     slug: string;
     title: string;
+    category: string;
     images: GalleryImage[];
     priceDzd: number;
     variants: Variant[];
 };
 
-export function ProductInteractive({ productId, slug, title, images, priceDzd, variants }: Props) {
+export function ProductInteractive({ productId, slug, title, category, images, priceDzd, variants }: Props) {
     const [selectedColor, setSelectedColor] = useState<string | undefined>(
         variants.filter((v) => v.stock > 0)[0]?.color
     );
@@ -36,6 +37,7 @@ export function ProductInteractive({ productId, slug, title, images, priceDzd, v
                 productId={productId}
                 slug={slug}
                 title={title}
+                category={category}
                 image={images[0]?.url ?? FALLBACK_PRODUCT_IMAGE}
                 images={images}
                 priceDzd={priceDzd}

@@ -10,6 +10,7 @@ type AddToCartProps = {
   productId: string;
   slug: string;
   title: string;
+  category: string;
   image: string;
   images?: Array<{ url: string; colorHint?: string }>;
   priceDzd: number;
@@ -107,7 +108,7 @@ function matchImageByColor(images: Array<{ url: string; colorHint?: string }>, c
   );
 }
 
-export function AddToCart({ productId, slug, title, image, images = [], priceDzd, variants, onColorChange }: AddToCartProps) {
+export function AddToCart({ productId, slug, title, category, image, images = [], priceDzd, variants, onColorChange }: AddToCartProps) {
   const t = useTranslations('product');
   const { addItem } = useCart();
   const router = useRouter();
@@ -199,6 +200,7 @@ export function AddToCart({ productId, slug, title, image, images = [], priceDzd
       image: selectedImage,
       size: selectedSize,
       color: selectedColor,
+      category,
       priceDzd,
       quantity
     };

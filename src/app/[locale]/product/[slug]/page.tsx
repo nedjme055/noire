@@ -43,6 +43,22 @@ export default async function ProductPage({
       <TrackViewContent name={i18n.title} value={effectivePrice} />
 
       <div className="container-mobile">
+        {/* Bundle offer banner for t-shirts */}
+        {product.category === 'tshirts' && (
+          <div className="mt-4 rounded-xl border border-black/10 bg-[#FAFAF8] px-4 py-3 text-center">
+            <p className="text-[13px] font-semibold text-ink">{t('bundleOfferTitle')}</p>
+            <p className="mt-0.5 text-[12px] text-black/50">{t('bundleOfferSubtitle')}</p>
+          </div>
+        )}
+
+        {/* Bundle offer banner for pants */}
+        {product.category === 'pants' && (
+          <div className="mt-4 rounded-xl border border-black/10 bg-[#FAFAF8] px-4 py-3 text-center">
+            <p className="text-[13px] font-semibold text-ink">{t('bundleOfferTitlePants')}</p>
+            <p className="mt-0.5 text-[12px] text-black/50">{t('bundleOfferSubtitle')}</p>
+          </div>
+        )}
+
         {/* Title + price above the grid on mobile */}
         <div className="pt-6 pb-4 sm:hidden">
           <h1 className="text-xl font-medium leading-tight text-ink">{i18n.title}</h1>
@@ -59,6 +75,7 @@ export default async function ProductPage({
           productId={product.id}
           slug={product.slug}
           title={i18n.title}
+          category={product.category}
           images={images}
           priceDzd={effectivePrice}
           variants={product.variants.map((v) => ({

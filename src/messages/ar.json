@@ -48,7 +48,11 @@
     "stockForVariant": "يتبقى {count} للحجم/اللون المختار",
     "addedTitle": "تمت الإضافة إلى الحقيبة",
     "goToCart": "عرض السلة",
-    "continueShopping": "مواصلة التسوق"
+    "continueShopping": "مواصلة التسوق",
+    "bundleOfferTitle": "اشتري تيشيرت + سروال واحصل على خصم 10%",
+    "bundleOfferTitlePants": "اشتري سروال + تيشيرت واحصل على خصم 10%",
+    "bundleOfferSubtitle": "يتم تطبيق الخصم تلقائياً عند الدفع",
+    "outOfStock": "غير متوفر"
   },
   "cart": {
     "empty": "حقيبتك فارغة",
@@ -59,7 +63,8 @@
     "shippingNote": "يتم حساب الشحن حسب الولاية عند الدفع.",
     "checkout": "متابعة الدفع",
     "title": "حقيبة التسوق",
-    "color": "اللون"
+    "color": "اللون",
+    "bundleDiscount": "عرض الباقة -10%"
   },
   "checkout": {
     "title": "إتمام الطلب",
@@ -71,6 +76,7 @@
     "address": "???????",
     "notes": "???????",
     "subtotal": "??????? ??????",
+    "bundleDiscount": "عرض الباقة -10%",
     "shipping": "?????",
     "total": "????????",
     "placing": "???? ????? ?????...",

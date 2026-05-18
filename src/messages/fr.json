@@ -48,7 +48,11 @@
     "stockForVariant": "{count} restant pour la taille/couleur choisie",
     "addedTitle": "Ajouté à votre panier",
     "goToCart": "Voir le panier",
-    "continueShopping": "Continuer vos achats"
+    "continueShopping": "Continuer vos achats",
+    "bundleOfferTitle": "Achetez un T-shirt + Pantalon et obtenez 10% de remise",
+    "bundleOfferTitlePants": "Achetez un Pantalon + T-shirt et obtenez 10% de remise",
+    "bundleOfferSubtitle": "Remise appliquee automatiquement au paiement",
+    "outOfStock": "Rupture de stock"
   },
   "cart": {
     "empty": "Votre panier est vide",
@@ -59,7 +63,8 @@
     "subtotal": "Sous-total",
     "shippingNote": "La livraison est calculee par wilaya lors du paiement.",
     "checkout": "Passer au paiement",
-    "title": "Votre panier"
+    "title": "Votre panier",
+    "bundleDiscount": "Offre bundle -10%"
   },
   "checkout": {
     "title": "Commande",
@@ -71,6 +76,7 @@
     "address": "Adresse",
     "notes": "Notes",
     "subtotal": "Sous-total",
+    "bundleDiscount": "Offre bundle -10%",
     "shipping": "Livraison",
     "total": "Total",
     "placing": "Validation...",

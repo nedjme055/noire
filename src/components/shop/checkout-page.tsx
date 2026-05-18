@@ -23,7 +23,7 @@ export function CheckoutPageClient({
 }) {
   const t = useTranslations('checkout');
   const router = useRouter();
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal, bundleDiscount, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({
@@ -50,7 +50,7 @@ export function CheckoutPageClient({
     [form.deliveryMethod, selectedWilaya]
   );
 
-  const total = subtotal + deliveryOptionPrice;
+  const total = subtotal - bundleDiscount + deliveryOptionPrice;
 
   const submit = async () => {
     if (items.length === 0) return;
@@ -257,6 +257,12 @@ export function CheckoutPageClient({
             <span className="text-black/45">{t('subtotal')}</span>
             <span className="font-medium">{formatDzd(subtotal, locale)}</span>
           </div>
+          {bundleDiscount > 0 && (
+            <div className="flex justify-between text-[13px]">
+              <span className="font-medium text-green-700">{t('bundleDiscount')}</span>
+              <span className="font-medium text-green-700">-{formatDzd(bundleDiscount, locale)}</span>
+            </div>
+          )}
           <div className="flex justify-between text-[13px]">
             <span className="text-black/45">{t('shipping')}</span>
             <span className="font-medium">{formatDzd(deliveryOptionPrice, locale)}</span>

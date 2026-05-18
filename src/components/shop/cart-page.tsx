@@ -10,7 +10,7 @@ const FALLBACK_PRODUCT_IMAGE = 'https://images.unsplash.com/photo-1483985988355-
 
 export function CartPageClient({ locale }: { locale: string }) {
   const t = useTranslations('cart');
-  const { items, subtotal, updateQty, removeItem } = useCart();
+  const { items, subtotal, bundleDiscount, updateQty, removeItem } = useCart();
 
   if (items.length === 0) {
     return (
@@ -119,6 +119,12 @@ export function CartPageClient({ locale }: { locale: string }) {
           <span className="text-[13px] uppercase tracking-wider text-black/45">{t('subtotal')}</span>
           <span className="text-[16px] font-semibold text-ink">{formatDzd(subtotal, locale)}</span>
         </div>
+        {bundleDiscount > 0 && (
+          <div className="mt-2 flex items-center justify-between">
+            <span className="text-[13px] font-medium text-green-700">{t('bundleDiscount')}</span>
+            <span className="text-[14px] font-semibold text-green-700">-{formatDzd(bundleDiscount, locale)}</span>
+          </div>
+        )}
         <p className="mt-1 text-[11px] text-black/30">{t('shippingNote')}</p>
       </div>
 
